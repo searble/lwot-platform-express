@@ -1,0 +1,10 @@
+.DS_Store
+dump.rdb
+npm-debug.log
+.idea/
+.git/
+.lwot/
+app/www/
+node_modules/
+bower_components/
+www/
