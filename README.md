@@ -82,7 +82,7 @@ You can make API or middleware in your folder `controller/express/`.
         module.exports = router;
         ```
         
-- Middlewares
+- Middleware
     - `controller/express/middleware/[FILE].js`
     - Example middleware code
     
@@ -100,4 +100,27 @@ You can make API or middleware in your folder `controller/express/`.
         ```
         
         - `config` returns `controller/express/config.json`
-        - you can use defined function in API code.  
+        - you can use defined function in API code.
+- Module
+    - `controller/express/module/[FILE].js`
+    - Example module code
+    
+        ```javascript
+        'use strict';
+        module.exports = (server, config)=> {
+            // server is created by http module
+            // config is controller/express/config.json
+            var io = require('socket.io').listen(server);
+            io.sockets.on('connection', (client) => {
+                console.log('socket.io connected');
+          
+                client.on('message', function (message) {
+                    console.log(message);
+                    client.send('response');
+                });
+          
+                client.on('disconnect', function () {
+                });
+            });
+        };
+        ```

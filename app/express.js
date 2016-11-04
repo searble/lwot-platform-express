@@ -9,6 +9,7 @@ const path = require('path');
 // path
 const ROOT_PATH = path.resolve(__dirname);
 const CONFIG_PATH = path.resolve(ROOT_PATH, 'controller', 'config.json');
+const MODULE_PATH = path.resolve(ROOT_PATH, 'controller', 'module');
 
 // config
 const configJSON = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'));
@@ -32,3 +33,7 @@ var server = http.createServer(app);
 server.listen(configJSON.port ? configJSON.port : 27017);
 server.on('error', onError);
 server.on('listening', onListening);
+
+let modules = fs.getFiles(MODULE_PATH);
+for (let i = 0; i < modules.length; i++)
+    require(path.resolve(MODULE_PATH, modules[i]))(server, configJSON);
