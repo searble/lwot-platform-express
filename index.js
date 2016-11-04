@@ -24,7 +24,7 @@ module.exports = (()=> {
 
     plugin.run = ()=> new Promise((callback)=> {
         let config = JSON.parse(fs.readFileSync(path.resolve(RUN_PATH, 'controller', 'config.json'), 'utf-8'));
-        terminal('nodemon', ['express'], {cwd: RUN_PATH}).then(()=> {
+        terminal('nodemon', ['express.js'], {cwd: RUN_PATH}).then(()=> {
             callback();
         });
 
