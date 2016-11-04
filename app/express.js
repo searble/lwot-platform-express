@@ -34,6 +34,12 @@ server.listen(configJSON.port ? configJSON.port : 27017);
 server.on('error', onError);
 server.on('listening', onListening);
 
-let modules = fs.getFiles(MODULE_PATH);
-for (let i = 0; i < modules.length; i++)
-    require(path.resolve(MODULE_PATH, modules[i]))(server, configJSON);
+try {
+    let modules = fs.getFiles(MODULE_PATH);
+    for (let i = 0; i < modules.length; i++)
+        try {
+            require(path.resolve(MODULE_PATH, modules[i]))(server, configJSON);
+        } catch (e) {
+        }
+} catch (e) {
+}
