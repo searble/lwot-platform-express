@@ -20,6 +20,7 @@ lwot run express
 - Config
     - `controller/express/config.json`
     - default
+    
         ```json
         {
             "port": 27017,
@@ -54,10 +55,12 @@ lwot run express
             "encrypt": "lWoT"
         }
         ```
+        
     - can add more config for middleware 
 - API
     - `controller/express/api/[PATH]/[FILE].js` link to `http://host/api/[PATH]/[FILE]`
     - Example api code 
+        
         ```javascript
         var express = require("express");
         var router = express.Router();
@@ -68,9 +71,11 @@ lwot run express
         
         module.exports = router;
         ```
+        
 - Middlewares
     - `controller/express/middleware/[FILE].js`
     - Example middleware code
+    
         ```javascript
         'use strict';
         module.exports = (config)=> {
@@ -83,5 +88,6 @@ lwot run express
             };
         };
         ```
+        
         - `config` returns `controller/express/config.json`
         - you can use defined function in API code.  
