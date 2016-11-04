@@ -21,7 +21,6 @@ module.exports = (()=> {
     });
 
     let plugin = {};
-    plugin.compiler = 'lwot';
 
     plugin.run = ()=> new Promise((callback)=> {
         let config = JSON.parse(fs.readFileSync(path.resolve(RUN_PATH, 'controller', 'config.json'), 'utf-8'));
