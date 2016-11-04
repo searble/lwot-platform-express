@@ -1,98 +1,74 @@
 'use strict';
 
-var path = require("path");
-var favicon = require("serve-favicon");
-var logger = require("morgan");
-var fs = require("./modules/fs");
+// node_modules
+const path = require("path");
+const favicon = require("serve-favicon");
+const logger = require("morgan");
+const fs = require("./modules/fs");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const express = require("express");
 
-/* Express */
-var express = require("express");
-var app = express();
+// const
+const ROOT_PATH = path.resolve(__dirname);
+const CONFIG_PATH = path.resolve(ROOT_PATH, 'controller', 'config.json');
+const MIDDLEWARE_PATH = path.resolve(ROOT_PATH, 'controller', 'middleware');
+const API_PATH = path.resolve(__dirname, 'controller', 'api');
 
-/* Cookie / Request Body Parser */
-var cookieParser = require("cookie-parser");
-var bodyParser = require("body-parser");
-
-/* Session */
-var session = require("express-session");
-var RedisStore = require("connect-redis")(session);
-var Redis = require("ioredis");
-
-const rootPath = path.resolve(__dirname);
-
-try {
-    fs.statSync(path.resolve(rootPath, 'controller', 'config.json'));
-}
-catch (err) {
-    if (err.code == "ENOENT")
-        console.log("Setting the 'config-sample.json', Change the file name to 'config.json'");
-    else
-        console.log(err);
-
-    process.exit(-1);
+if (!fs.existsSync(CONFIG_PATH)) {
+    console.log(`create 'config.json' file.`);
+    return;
 }
 
-const configJSON = JSON.parse(fs.readFileSync(path.resolve(rootPath, 'controller', 'config.json')) + "");
-const serviceConfig = configJSON.express;
+// config
+const configJSON = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'));
 
-/* Listening Port Setting */
-app.set("port", serviceConfig.port);
+let app = express();
+app.set("port", configJSON.port ? configJSON.port : 27017);
 
-/* Logger Setting */
+// set default middlewares
 app.use(logger("dev"));
-
-/* Cookie / Request Body Parser Setting */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-
-/* Static Path Setting */
 app.use(express.static(path.join(__dirname, 'www')));
 
-/* Favicon Setting */
-//app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
-
-/* Session Setting */
-var redisClient = new Redis(serviceConfig.redis);
-app.use(session({
-    secret: serviceConfig.session.secret,
-    store: new RedisStore({client: redisClient}),
-    resave: serviceConfig.session.resave,
-    saveUninitialized: serviceConfig.session.saveUninitialized
-}));
-
-/* Middlewares Setting */
-let MIDDLEWARE_DIR = path.resolve(rootPath, 'controller', 'middlewares');
-let MIDDLEWARE_LIST = fs.getFiles(MIDDLEWARE_DIR);
-
+// Middlewares extension setting
+let MIDDLEWARE_LIST = fs.getFiles(MIDDLEWARE_PATH);
 for (let i = 0; i < MIDDLEWARE_LIST.length; i++)
-    app.use(require(path.resolve(MIDDLEWARE_DIR, MIDDLEWARE_LIST[i]))(serviceConfig));
+    app.use(require(path.resolve(MIDDLEWARE_PATH, MIDDLEWARE_LIST[i]))(configJSON));
 
-
-/* API Routes Setting */
-let API_ROOT = path.resolve(__dirname, 'controller', 'api');
-var api_routes = fs.getFiles(API_ROOT);
-for (var i = 0; i < api_routes.length; i++) {
-    var rmodule = require(path.resolve(API_ROOT, api_routes[i]));
-    var href = '/api' + path.resolve(API_ROOT, path.basename(api_routes[i], path.extname(api_routes[i]))).replace(API_ROOT, '');
+// API route
+let api_routes = fs.getFiles(API_PATH);
+for (let i = 0; i < api_routes.length; i++) {
+    let rmodule = require(path.resolve(API_PATH, api_routes[i]));
+    let href = '/api' + path.resolve(API_PATH, path.basename(api_routes[i], path.extname(api_routes[i]))).replace(API_PATH, '');
     app.use(href, rmodule);
     console.log("[routes]", href);
 }
 
-/* Exception Handling */
 // not found error
 app.use(function (req, res, next) {
-    var err = new Error("Not Found");
+    let err = new Error("Not Found");
     err.status = 404;
-
-    res.status(err.status || 500);
-    res.send("404 Not Found");
+    next(err);
 });
 
 // error page
 app.use(function (err, req, res) {
     res.status(err.status || 500);
-    res.send("404 Not Found");
+
+    if (configJSON['static-page']) {
+        if (configJSON['static-page'][err.status]) {
+            let file_path = path.resolve(ROOT_PATH, configJSON['static-page'][err.status]);
+            if (fs.existsSync(file_path)) {
+                res.send(fs.readFileSync(file_path, 'utf-8'));
+                return;
+            }
+        }
+    }
+
+    res.send(`<h1>STATUS ${err.status}</h1><hr/><p>${JSON.stringify(err, null, 4)}</p>`);
 });
 
 module.exports = app;

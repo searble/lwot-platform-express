@@ -30,7 +30,7 @@ module.exports = (()=> {
         });
 
         setTimeout(()=> {
-            open('http://localhost:' + config.express.port);
+            open('http://localhost:' + (config.port ? config.port : 27017));
         }, 500);
     });
 

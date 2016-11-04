@@ -1,33 +1,34 @@
-var fs = require('fs');
-var app = require('./app');
-var http = require('http');
-var path = require('path');
+'use strict';
 
-/* Service Config Loading */
-const rootPath = path.resolve(__dirname);
-const configJSON = JSON.parse(fs.readFileSync(path.resolve(rootPath, 'controller', 'config.json')) + '');
-var serviceConfig = configJSON.express;
+// node_modules
+const fs = require('fs');
+const app = require('./app');
+const http = require('http');
+const path = require('path');
 
-/* Server Creation */
-var server = http.createServer(app);
+// path
+const ROOT_PATH = path.resolve(__dirname);
+const CONFIG_PATH = path.resolve(ROOT_PATH, 'controller', 'config.json');
 
-/* Server Listening Start(Destination Port : serviceConfig.port) */
-server.listen(serviceConfig.port);
+// config
+const configJSON = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'));
 
-/* Server Event Listening Start */
-server.on('error', onError);
-server.on('listening', onListening);
-
-/* Event Listener */
-function onError(error) {
+// Event Listener
+let onError = (error)=> {
     console.log("express.js : onError() : Error!");
     process.exit(1);
-}
+};
 
-function onListening() {
+let onListening = ()=> {
     var addr = server.address();
     var bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
     console.log('Listening on ' + bind);
-}
+};
+
+// server
+var server = http.createServer(app);
+server.listen(configJSON.port ? configJSON.port : 27017);
+server.on('error', onError);
+server.on('listening', onListening);

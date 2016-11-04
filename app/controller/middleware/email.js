@@ -1,5 +1,7 @@
-module.exports = function (serviceConfig) {
-    return function (req, res, next) {
+'use strict';
+
+module.exports = (serviceConfig)=> {
+    return (req, res, next)=> {
         var sendmail = function (to, subject, html, cb) {
             var mailserver = {
                 user: serviceConfig.sendmail.user,

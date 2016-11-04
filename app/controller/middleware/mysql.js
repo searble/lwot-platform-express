@@ -1,5 +1,5 @@
-module.exports = function (serviceConfig) {
-    return function (req, res, next) {
+module.exports = (serviceConfig)=> {
+    return (req, res, next)=> {
         var mysql = require('mysql');
         req.mysql = mysql.createConnection(serviceConfig.mysql);
 

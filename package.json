@@ -1,11 +1,17 @@
 {
     "name": "express",
     "plugin": "platform",
-    "version": "0.0.1",
-    "description": "",
+    "version": "0.0.2",
+    "description": "lwot platform express",
     "main": "index.js",
-    "author": "",
-    "license": "ISC",
+    "contributors": [
+        {
+            "name": "proin",
+            "email": "proin@proinlab.com",
+            "web": "http://proinlab.com"
+        }
+    ],
+    "license": "MIT",
     "dependencies": {
         "open": "0.0.5"
     }
