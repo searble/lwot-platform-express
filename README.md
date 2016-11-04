@@ -2,20 +2,30 @@
 
 ## Install
 
+### Install Dependencies
+
+```bash
+sudo apt-get install mysql-server mysql-client redis-*  #ubuntu
+brew install mysql redis                                #Mac
+```
+
+### Install Platform
+
 ```bash
 lwot install https://github.com/searble/lwot-platform-express
 lwot install platform express #not working yet
 ```
 
-## LWOT Support
+### Run
 
 ```bash
+lwot build express
 lwot run express
 ```
 
 ## Development Guide
 
-### Controller
+You can make API or middleware in your folder `controller/express/`.
 
 - Config
     - `controller/express/config.json`
