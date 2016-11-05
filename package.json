@@ -1,18 +1,19 @@
 {
-    "name": "express",
-    "plugin": "platform",
-    "version": "0.0.3",
-    "description": "lwot platform express",
-    "main": "index.js",
-    "contributors": [
-        {
-            "name": "proin",
-            "email": "proin@proinlab.com",
-            "web": "http://proinlab.com"
-        }
-    ],
-    "license": "MIT",
-    "dependencies": {
-        "open": "0.0.5"
+  "name": "express",
+  "plugin": "platform",
+  "version": "0.0.4",
+  "description": "lwot platform express",
+  "main": "index.js",
+  "contributors": [
+    {
+      "name": "proin",
+      "email": "proin@proinlab.com",
+      "web": "http://proinlab.com"
     }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "cross-spawn": "^5.0.1",
+    "open": "0.0.5"
+  }
 }

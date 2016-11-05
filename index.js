@@ -1,9 +1,13 @@
 'use strict';
 
 module.exports = (()=> {
+    let spawn = require("child_process").spawn;
+    // if windows
+    if (process.platform == 'win32')
+        spawn = require('cross-spawn');
+
     const fs = require('fs');
     const path = require('path');
-    const spawn = require("child_process").spawn;
     const open = require("open");
 
     const PLUGIN_ROOT = path.resolve(__dirname);
