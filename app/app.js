@@ -41,8 +41,8 @@ for (let i = 0; i < MIDDLEWARE_LIST.length; i++)
 // API route
 let api_routes = fs.getFiles(API_PATH);
 for (let i = 0; i < api_routes.length; i++) {
-    let rmodule = require(path.resolve(API_PATH, api_routes[i]));
-    let href = '/api' + path.resolve(API_PATH, path.basename(api_routes[i], path.extname(api_routes[i]))).replace(API_PATH, '');
+    let rmodule = require(api_routes[i]);
+    let href = '/api' + api_routes[i].substring(0, api_routes[i].length - path.extname(api_routes[i]).length).replace(API_PATH, "");
     app.use(href, rmodule);
     console.log("[routes]", href);
 }
