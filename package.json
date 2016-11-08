@@ -1,7 +1,7 @@
 {
   "name": "express",
   "plugin": "platform",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "lwot platform express",
   "main": "index.js",
   "contributors": [
