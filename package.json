@@ -1,7 +1,7 @@
 {
   "name": "express",
   "plugin": "platform",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "lwot platform express",
   "main": "index.js",
   "contributors": [
@@ -9,6 +9,10 @@
       "name": "proin",
       "email": "proin@proinlab.com",
       "web": "http://proinlab.com"
+    },
+    {
+      "name": "ple",
+      "email": "mknl8520@gmail.com"
     }
   ],
   "license": "MIT",

@@ -8,3 +8,4 @@ app/www/
 node_modules/
 bower_components/
 www/
+config.json
