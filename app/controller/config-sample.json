@@ -1,0 +1,34 @@
+{
+  "port": 27017,
+  "dev": true,
+  "static-page": {
+    "404": "/controller/static/404.html",
+    "500": "/www/static/500.html"
+  },
+  "session": {
+    "secret": "LwoT-seSsIon-sEcreT",
+    "resave": false,
+    "saveUninitialized": false
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": "3306",
+    "user": "root",
+    "password": "",
+    "database": "myApp"
+  },
+  "sendmail": {
+    "host": "smtp.host-server.com",
+    "user": "email@email.com",
+    "password": "password",
+    "from": "Service <email@email.com>",
+    "ssl": true
+  },
+  "encrypt": "lWoT"
+  // Here, Your Custom Configuration.
+  // and rename config-sample.json to config.json
+}
