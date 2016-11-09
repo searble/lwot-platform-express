@@ -14,15 +14,24 @@ brew install mysql redis                                #Mac
 ```bash
 lwot install https://github.com/searble/lwot-platform-express
 lwot install platform express #not working yet
-```
-
-### Run
-
-```bash
 lwot build express
-lwot run express
 ```
 
+### Platform Functions
+
+- run
+    - this process run by nodemon
+    - `lwot express run`
+- forever
+    - `lwot express forever [commands (optional)]`
+    - start: `lwot express forever start`
+        - start as background process & print log
+        - start in background if you out
+    - log: `lwot express forever log`
+        - print log
+    - stop: `lwot express forever stop`
+        - stop background process
+    
 ## Development Guide
 
 You can make API or middleware in your folder `controller/express/`.
