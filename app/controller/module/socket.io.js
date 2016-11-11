@@ -11,4 +11,6 @@ module.exports = exports = (server, config)=> {
         client.on('disconnect', function () {
         });
     });
+
+    return {}; // returns to express request object
 };

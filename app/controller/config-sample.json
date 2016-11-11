@@ -29,6 +29,4 @@
     "ssl": true
   },
   "encrypt": "lWoT"
-  // Here, Your Custom Configuration.
-  // and rename config-sample.json to config.json
 }

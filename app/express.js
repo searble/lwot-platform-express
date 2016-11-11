@@ -1,8 +1,7 @@
 'use strict';
 
 // node_modules
-const fs = require('fs');
-const app = require('./app');
+const fs = require('./modules/fs');
 const http = require('http');
 const path = require('path');
 
@@ -28,18 +27,23 @@ let onListening = ()=> {
     console.log('Listening on ' + bind);
 };
 
+let moduleList = {};
+try {
+    let modules = fs.getFiles(MODULE_PATH);
+    for (let i = 0; i < modules.length; i++)
+        try {
+            let fn = require(path.resolve(MODULE_PATH, modules[i]))(server, configJSON);
+            if (fn)
+                moduleList[path.basename(modules[i], '.js')] = fn;
+        } catch (e) {
+        }
+} catch (e) {
+}
+
+const app = require('./app')(moduleList);
+
 // server
 var server = http.createServer(app);
 server.listen(configJSON.port ? configJSON.port : 27017);
 server.on('error', onError);
 server.on('listening', onListening);
-
-try {
-    let modules = fs.getFiles(MODULE_PATH);
-    for (let i = 0; i < modules.length; i++)
-        try {
-            require(path.resolve(MODULE_PATH, modules[i]))(server, configJSON);
-        } catch (e) {
-        }
-} catch (e) {
-}
