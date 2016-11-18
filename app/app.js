@@ -28,7 +28,8 @@ module.exports = (modules)=> {
     app.set("port", configJSON.port ? configJSON.port : 27017);
 
     // set default middlewares
-    app.use(logger("dev"));
+    if (configJSON.dev)
+        app.use(logger("dev"));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(cookieParser());
