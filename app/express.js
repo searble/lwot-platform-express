@@ -32,7 +32,7 @@ try {
     let modules = fs.getFiles(MODULE_PATH);
     for (let i = 0; i < modules.length; i++)
         try {
-            let fn = require(path.resolve(MODULE_PATH, modules[i]))(server, configJSON);
+            let fn = require(path.resolve(MODULE_PATH, modules[i]));
             if (fn)
                 moduleList[path.basename(modules[i], '.js')] = fn;
         } catch (e) {
