@@ -27,8 +27,6 @@ module.exports = (modules)=> {
     let app = express();
     app.set("port", configJSON.port ? configJSON.port : 27017);
 
-    for (let key in modules) modules[key] = modules[key](app, configJSON);
-
     // set default middlewares
     if (configJSON.dev)
         app.use(logger("dev"));

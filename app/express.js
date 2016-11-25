@@ -43,7 +43,9 @@ try {
 const app = require('./app')(moduleList);
 
 // server
-var server = http.createServer(app);
+let server = http.createServer(app);
+for (let key in moduleList) moduleList[key] = moduleList[key](server, configJSON);
+
 server.listen(configJSON.port ? configJSON.port : 27017);
 server.on('error', onError);
 server.on('listening', onListening);
