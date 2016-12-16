@@ -28,6 +28,11 @@ module.exports = (()=> {
     plugin.forever = (args)=> new Promise((callback)=> {
         let config = JSON.parse(fs.readFileSync(path.resolve(RUN_PATH, 'controller', 'config.json'), 'utf-8'));
 
+        let silent = false;
+        for (let i = 0; i < args.length; i++)
+            if (args[i] === '--silent')
+                silent = true;
+
         let log = ()=> new Promise((next)=> {
             const Tail = require("tail").Tail;
 
@@ -65,16 +70,23 @@ module.exports = (()=> {
 
         let start = ()=> new Promise((next)=> {
             forever.startDaemon(path.resolve(RUN_PATH, 'express.js'), {});
-            setTimeout(()=> {
-                open('http://localhost:' + (config.port ? config.port : 27017));
-                next();
-            }, 1000);
+            if (silent === false)
+                setTimeout(()=> {
+                    open('http://localhost:' + (config.port ? config.port : 27017));
+                    next();
+                }, 1000);
         });
 
         if (!args[0]) {
             stop()
                 .then(()=> start())
-                .then(()=> log())
+                .then(()=> {
+                    if (silent === false) {
+                        if (callback) callback();
+                        return;
+                    }
+                    return log()
+                })
                 .then(callback);
         } else if (args[0] === 'stop') {
             stop()
@@ -82,13 +94,19 @@ module.exports = (()=> {
         } else if (args[0] === 'start') {
             stop()
                 .then(()=> start())
-                .then(()=> log())
+                .then(()=> {
+                    if (silent === false) {
+                        if (callback) callback();
+                        return;
+                    }
+                    return log()
+                })
                 .then(callback);
         } else if (args[0] === 'log') {
             log()
                 .then(callback);
         } else {
-            console.log('lwot express forever [log/stop/start]');
+            console.log('lwot express forever [log/stop/start] [options]');
         }
     });
 
