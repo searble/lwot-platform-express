@@ -61,7 +61,7 @@ module.exports = (modules)=> {
     });
 
     // error page
-    app.use(function (err, req, res) {
+    app.use(function (err, req, res, next) {
         res.status(err.status || 500);
 
         if (configJSON['static-page']) {
@@ -74,7 +74,7 @@ module.exports = (modules)=> {
             }
         }
 
-        res.send(`<h1>STATUS ${err.status}</h1><hr/><p>${JSON.stringify(err, null, 4)}</p>`);
+        res.send(`<h1>STATUS ${err.status}</h1><hr/><p>${err.message}</p>`);
     });
 
     return app;

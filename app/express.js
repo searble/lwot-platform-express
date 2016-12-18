@@ -1,6 +1,7 @@
 'use strict';
 
 // node_modules
+const cluster = require('cluster');
 const fs = require('./modules/fs');
 const http = require('http');
 const path = require('path');
@@ -53,4 +54,16 @@ let starter = ()=> {
     server.on('listening', onListening);
 };
 
-starter();
+if (cluster.isMaster) {
+    let worker = null;
+    let createWorker = ()=> {
+        worker = cluster.fork();
+        worker.on('exit', ()=> {
+            createWorker();
+        });
+    };
+
+    createWorker();
+} else {
+    starter();
+}
