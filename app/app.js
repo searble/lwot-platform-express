@@ -47,19 +47,6 @@ module.exports = (modules)=> {
     // API route
     let api_routes = fs.getFiles(API_PATH);
     for (let i = 0; i < api_routes.length; i++) {
-        let ignore = (routes) => {
-            for (let j = 0; j < configJSON.ignore.length; j++) {
-                if (routes.toString().search(configJSON.ignore[j]) != -1) {
-                    console.log("[routes ignored] : " + routes.toString() + " by " + configJSON.ignore[j]);
-                    return true;
-                }
-            }
-            return false;
-        };
-
-        if (ignore(api_routes[i]))
-            continue;
-        
         let rmodule = require(api_routes[i]);
         let href = '/api' + api_routes[i].substring(0, api_routes[i].length - path.extname(api_routes[i]).length).replace(API_PATH, "");
         app.use(href, rmodule);
